@@ -8,6 +8,7 @@ import static org.fusesource.jansi.Ansi.ansi;
 public class Client {
 
   static String[][] game = new String[4][8];
+  static String board = "";
 
   public static void main(String args[]) throws IOException {
 
@@ -24,36 +25,46 @@ public class Client {
       out = new DataOutputStream(socket.getOutputStream());
 //      String init = input.readUTF();
 //      System.out.println(init);
-      String init = initBoard();
-      System.out.println(init);
+      board = initBoard();
+      System.out.println(board);
       String move = "";
       String where = "";
       String target = "";
       while (true) {
         String result1 = input.readUTF();
         cleanConsole();
-        System.out.println(ansi().render(result1));
+        board = ansi().render(result1).toString();
+        System.out.println(board);
         String token = input.readUTF(); // control
-        System.out.println("請輸入要執行的動作(輸入數字) (1)移動棋子 (2)翻牌 (3)結束遊戲");
-        move = sc.nextLine();
-        if("1".equals(move)){
-          System.out.println("請輸入要移動的棋子 座標(x,y)，例如：0,4");
-          where = sc.nextLine();
-          System.out.println("請輸入要前往的目標 座標(x,y)，例如：0,4");
-          target = sc.nextLine();
-        }else if("2".equals(move)){
-          System.out.println("請輸入要翻牌的棋子 座標(x,y)，例如：0,4");
-          where = sc.nextLine();
-          target = "0,0";
-        }else{
-          break;
+        while (true){
+          System.out.println("請輸入要執行的動作(輸入數字) (1)移動/吃 棋子 (2)翻牌");
+          move = sc.nextLine();
+          if("1".equals(move)){
+            System.out.println("請輸入要操作的棋子座標(上至下，左至右)，例如：0,6");
+            where = sc.nextLine();
+            System.out.println("請輸入要前往/攻擊的目標位置座標(上至下，左至右)，例如：0,6");
+            target = sc.nextLine();
+            break;
+          }else if("2".equals(move)){
+            System.out.println("請輸入要翻牌的棋子座標(上至下，左至右)，例如：0,6");
+            where = sc.nextLine();
+            target = "0,0";
+            break;
+          }else{
+            cleanConsole();
+            System.out.println(board);
+            System.out.println("輸入錯誤，請重新輸入");
+            System.out.println();
+          }
         }
+
         out.writeUTF(move +"," + where + "," + target);
         String result2 = input.readUTF();
         cleanConsole();
-        System.out.println(ansi().render(result2));
+        board = ansi().render(result2).toString();
+        System.out.println(board);
       }
-      System.out.println("遊戲結束");
+//      System.out.println("遊戲結束");
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
