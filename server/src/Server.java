@@ -55,7 +55,6 @@ public class Server {
       String[] moves;
       while (!c1_say.equalsIgnoreCase("quit") && !c2_say.equalsIgnoreCase("quit")) {
         writeGame(c1_out);
-//        c1_out.writeUTF("AA"); // token
         boolean valid1 = false;
         boolean valid2 = false;
         while (!valid1) {
@@ -77,7 +76,6 @@ public class Server {
         writeGame(c1_out);
         c2_out.writeUTF(drawGameBoard());
         // ----------------------------------
-//        c2_out.writeUTF("BB"); // token
         writeGame(c2_out);
         while (!valid2) {
           c2_say = c2_input.readUTF();
@@ -189,122 +187,115 @@ public class Server {
           || (team == Team.RED && redTeam.contains(target))) { /** 目標是沒翻開的棋或是自己的棋 */
         System.out.println("不可以移動到這");
         return false;
+      }
+      if ("炮砲".contains(piece)) {
+        if(checkPlace(x, y, target_x, target_y)) {
+          if ("　".equals(target)) {
+            return changePiece(x, y, target_x, target_y, origin_piece);
+          } else {
+            System.out.println("不可以移動到這");
+            return false;
+          }
+        }
+        if("　".equals(target)){
+          System.out.println("不可以移動到這");
+          return false;
+        }
+        return artilleryPiece(x, y, target_x, target_y, origin_piece);
+      } else if (!checkPlace(x, y, target_x, target_y)) {
+        System.out.println("不可以移動到這");
+        return false;
       } else {
         if ("　".equals(target)) {
-          game[x][y] = "　";
-          game[target_x][target_y] = origin_piece;
-          return true;
+          return changePiece(x, y, target_x, target_y, origin_piece);
         } else {
           if (team == Team.BLUE) {
             switch (piece) {
               case "將":
                 if ("帥仕相硨傌炮".contains(target)) {
-                  game[x][y] = "　";
-                  game[target_x][target_y] = origin_piece;
-                  return true;
+                  return changePiece(x, y, target_x, target_y, origin_piece);
                 } else {
                   System.out.println("牌太小，吃不了");
                   return false;
                 }
               case "士":
                 if ("仕相硨傌炮兵".contains(target)) {
-                  game[x][y] = "　";
-                  game[target_x][target_y] = origin_piece;
-                  return true;
+                  return changePiece(x, y, target_x, target_y, origin_piece);
                 } else {
                   System.out.println("牌太小，吃不了");
                   return false;
                 }
               case "象":
                 if ("相硨傌炮兵".contains(target)) {
-                  game[x][y] = "　";
-                  game[target_x][target_y] = origin_piece;
-                  return true;
+                  return changePiece(x, y, target_x, target_y, origin_piece);
                 } else {
                   System.out.println("牌太小，吃不了");
                   return false;
                 }
               case "車":
                 if ("硨傌炮兵".contains(target)) {
-                  game[x][y] = "　";
-                  game[target_x][target_y] = origin_piece;
-                  return true;
+                  return changePiece(x, y, target_x, target_y, origin_piece);
                 } else {
                   System.out.println("牌太小，吃不了");
                   return false;
                 }
               case "馬":
                 if ("傌炮兵".contains(target)) {
-                  game[x][y] = "　";
-                  game[target_x][target_y] = origin_piece;
-                  return true;
+                  return changePiece(x, y, target_x, target_y, origin_piece);
                 } else {
                   System.out.println("牌太小，吃不了");
                   return false;
                 }
               case "卒":
                 if ("帥兵".contains(target)) {
-                  game[x][y] = "　";
-                  game[target_x][target_y] = origin_piece;
-                  return true;
+                  return changePiece(x, y, target_x, target_y, origin_piece);
                 } else {
                   System.out.println("牌太小，吃不了");
                   return false;
                 }
             }
             return false;
+
           } else {
             switch (piece) {
               case "帥":
                 if ("將士象車馬砲".contains(target)) {
-                  game[x][y] = "　";
-                  game[target_x][target_y] = origin_piece;
-                  return true;
+                  return changePiece(x, y, target_x, target_y, origin_piece);
                 } else {
                   System.out.println("牌太小，吃不了");
                   return false;
                 }
               case "仕":
                 if ("士象車馬砲卒".contains(target)) {
-                  game[x][y] = "　";
-                  game[target_x][target_y] = origin_piece;
-                  return true;
+                  return changePiece(x, y, target_x, target_y, origin_piece);
                 } else {
                   System.out.println("牌太小，吃不了");
                   return false;
                 }
               case "相":
                 if ("象車馬砲卒".contains(target)) {
-                  game[x][y] = "　";
-                  game[target_x][target_y] = origin_piece;
-                  return true;
+                  return changePiece(x, y, target_x, target_y, origin_piece);
                 } else {
                   System.out.println("牌太小，吃不了");
                   return false;
                 }
               case "硨":
                 if ("車馬砲卒".contains(target)) {
-                  game[x][y] = "　";
-                  game[target_x][target_y] = origin_piece;
-                  return true;
+                  return changePiece(x, y, target_x, target_y, origin_piece);
                 } else {
                   System.out.println("牌太小，吃不了");
                   return false;
                 }
               case "傌":
                 if ("馬砲卒".contains(target)) {
-                  game[x][y] = "　";
-                  game[target_x][target_y] = origin_piece;
-                  return true;
+                  return changePiece(x, y, target_x, target_y, origin_piece);
                 } else {
                   System.out.println("牌太小，吃不了");
                   return false;
                 }
               case "兵":
                 if ("將卒".contains(target)) {
-                  game[x][y] = "　";
-                  game[target_x][target_y] = origin_piece;
-                  return true;
+                  return changePiece(x, y, target_x, target_y, origin_piece);
                 } else {
                   System.out.println("牌太小，吃不了");
                   return false;
@@ -317,9 +308,87 @@ public class Server {
     }
     System.out.println("這不是你的棋子");
     return false;
-
   }
 
+  private static boolean artilleryPiece(int x, int y, int target_x, int target_y, String origin_piece) {
+    int count = 0;
+    if (x == target_x) { // 橫向
+      if (y > target_y) {
+        for (int i = y - 1; i > target_y; i--) {
+          if (!"　".equals(parseString(game[x][i]))) {
+            count++;
+          }
+        }
+        if (count == 1) {
+          return changePiece(x, y, target_x, target_y, origin_piece);
+        } else {
+          System.out.println("走法不合規定");
+          return false;
+        }
+      } else if(y < target_y) {
+        for (int i = y + 1; i < target_y; i++) {
+          if (!"　".equals(parseString(game[x][i]))) {
+            count++;
+          }
+        }
+        if (count == 1) {
+          return changePiece(x, y, target_x, target_y, origin_piece);
+        } else {
+          System.out.println("走法不合規定");
+          return false;
+        }
+      }else {
+        System.out.println("走法不合規定");
+        return false;
+      }
+    } else if (y == target_y) { // 直向
+      if (x > target_x) {
+        for (int i = x - 1; i > target_x; i--) {
+          if (!"　".equals(parseString(game[i][y]))) {
+            count++;
+          }
+        }
+        if (count == 1) {
+          return changePiece(x, y, target_x, target_y, origin_piece);
+        } else {
+          System.out.println("走法不合規定");
+          return false;
+        }
+      } else if(x < target_x) {
+        for (int i = x + 1; i < target_x; i++) {
+          if (!"　".equals(parseString(game[i][y]))) {
+            count++;
+          }
+        }
+        if (count == 1) {
+          return changePiece(x, y, target_x, target_y, origin_piece);
+        } else {
+          System.out.println("走法不合規定");
+          return false;
+        }
+      }else {
+        System.out.println("走法不合規定");
+        return false;
+      }
+    }
+    System.out.println("走法不合規定");
+    return false;
+  }
+
+  private static boolean changePiece(int x, int y, int target_x, int target_y, String origin_piece) {
+    game[x][y] = "　";
+    game[target_x][target_y] = origin_piece;
+    return true;
+  }
+
+  private static boolean checkPlace(int x, int y, int target_x, int target_y) {
+    if (x == target_x) {
+      return target_y == y + 1 || target_y == y - 1;
+    } else if (y == target_y) {
+      return target_x == x + 1 || target_x == x - 1;
+    }
+    return false;
+  }
 
   private static String parseString(String input) {
     if (input.length() == 1) return input;
@@ -327,7 +396,6 @@ public class Server {
   }
 
   enum Team {
-
     BLUE, RED
   }
 

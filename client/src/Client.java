@@ -37,7 +37,6 @@ public class Client {
         board = ansi().render(result1).toString();
         System.out.println(board);
         readGame(input);
-//        String token = input.readUTF(); // control
         boolean valid = false;
         while (!valid) {
           boolean flag = false;
@@ -74,10 +73,8 @@ public class Client {
         cleanConsole();
         board = ansi().render(result2).toString();
         System.out.println(board);
-//        String token2 = input.readUTF();
         readGame(input);
       }
-//      System.out.println("遊戲結束");
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
